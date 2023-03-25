@@ -6,10 +6,11 @@ import torchvision.transforms as transforms
 import numpy as np
 
 # CONFIGURATION VARS: -----------------------------------------------------------
-BATCH_SIZE = 4  # size of the loader batches
+BATCH_SIZE = 64  # size of the loader batches
 DATA_FRACTION = 0.10  # fraction of the data to actually load
 
-
+print(f">> Initializing data with parameters: "
+      f"BATCH_SIZE={BATCH_SIZE}, DATA_FRACTION={DATA_FRACTION}")
 # Helpers: -----------------------------------------------------------
 def sample_dataset(dataset: torch.utils.data.Dataset,
                    fraction: float = 0.1):
