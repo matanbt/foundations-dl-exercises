@@ -47,10 +47,13 @@ def train(model: nn.Module,
           trainloader: torch.utils.data.DataLoader,
           testloader: torch.utils.data.DataLoader,
           optimizer: torch.optim.Optimizer,
-          init_func: callable,
+          init_func: callable,  # function for weight initialization
           device: Union[torch.device, str] = 'cpu',
           num_epochs: int = 1):
 
+    print(f">> Runs training of {model} on device={device} for {num_epochs} epochs.")
+
+    # set device:
     model.to(device)
 
     # metrics:
@@ -66,6 +69,7 @@ def train(model: nn.Module,
     for epoch in range(num_epochs):
 
         # Training Epoch
+        model.train()
         with tqdm(trainloader, unit="batch", desc=f"Train - Epoch {epoch}") as tepoch:
             for x_batch, y_batch in tepoch:
                 x_batch, y_batch = x_batch.to(device), y_batch.to(device)
@@ -93,6 +97,7 @@ def train(model: nn.Module,
             tepoch.set_postfix(loss=train_accuracies[epoch], accuracy=train_losses[epoch])
 
         # Evaluation Epoch
+        model.eval()
         with torch.no_grad():
             with tqdm(testloader, unit="batch", desc=f"Evaluate - Epoch {epoch}") as tepoch:
                 for x_batch, y_batch in tepoch:
@@ -125,10 +130,14 @@ def train(model: nn.Module,
 
 if __name__ == '__main__':
     model = BaselineNN()
-    train(
+    results: TrainResults = train(
         model=model,
         init_func=init_func__zero_mean_gaussian(std=1),
-        optimizer=get_sgd_optimizer(model),
+        optimizer=get_sgd_optimizer(model, lr=0.001, momentum=0.9),
         trainloader=trainloader,
-        testloader=testloader
+        testloader=testloader,
+        num_epochs=3,
+        device='cpu'
     )
+    results.get_accuracies_curve().show()
+
