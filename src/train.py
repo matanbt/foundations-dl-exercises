@@ -9,9 +9,9 @@ import plotly.express as px
 import plotly.graph_objects as go
 import pandas as pd
 
-from cifar10_dataset import trainloader, testloader
-from models import BaselineNN
-from utils import init_func__zero_mean_gaussian, get_sgd_optimizer
+from src.cifar10_dataset import trainloader, testloader
+from src.models import BaselineNN
+from src.utils import init_func__zero_mean_gaussian, get_sgd_optimizer
 
 
 """
@@ -31,15 +31,24 @@ class TrainResults:
         fig = px.line(pd.DataFrame(asdict(self)) * 100,
                       y=['train_accuracies', 'test_accuracies'],
                       title="Accuracy over Epochs", labels={'index': 'Epoch', 'value': 'Accuracy (%)'})
-
+        fig.update_layout(yaxis_range=[0, 100])
         return fig
 
     def get_losses_curve(self) -> go.Figure:
         fig = px.line(pd.DataFrame(asdict(self)),
                       y=['train_losses', 'test_losses'],
                       title="Losses over Epochs", labels={'index': 'Epoch', 'value': 'Loss'})
-
+        fig.update_layout(yaxis_range=[0, 3])
         return fig
+
+    def report(self):
+        print(">> Accuracies Curves:")
+        self.get_accuracies_curve().show()
+        print(">> Losses Curves:")
+        self.get_losses_curve().show()
+        print(">> Optimization ended with:")
+        print(f"   >> TRAIN-SET: best-accuracy={self.train_accuracies.max() * 100}, accuracy={self.train_accuracies[-1] * 100}%, loss={self.train_losses[-1] }")
+        print(f"   >> TEST-SET: best-accuracy={self.test_accuracies.max() * 100} accuracy={self.test_accuracies[-1] * 100}%, loss={self.test_losses[-1] }")
 
 
 # run training on a torch model
@@ -132,8 +141,8 @@ if __name__ == '__main__':
     model = BaselineNN()
     results: TrainResults = train(
         model=model,
-        init_func=init_func__zero_mean_gaussian(std=1),
-        optimizer=get_sgd_optimizer(model, lr=0.001, momentum=0.9),
+        init_func=init_func__zero_mean_gaussian(std=0.1),
+        optimizer=get_sgd_optimizer(model, lr=0.01, momentum=0.4),
         trainloader=trainloader,
         testloader=testloader,
         num_epochs=3,
