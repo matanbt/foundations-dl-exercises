@@ -5,9 +5,11 @@ import torchvision
 import torchvision.transforms as transforms
 import numpy as np
 
+from sklearn.decomposition import PCA
+
 # CONFIGURATION VARS: -----------------------------------------------------------
 BATCH_SIZE = 64  # size of the loader batches
-DATA_FRACTION = 0.10  # fraction of the data to actually load
+DATA_FRACTION = 0.1  # fraction of the data to actually load
 
 print(f">> Initializing data with parameters: "
       f"BATCH_SIZE={BATCH_SIZE}, DATA_FRACTION={DATA_FRACTION}")
@@ -59,4 +61,18 @@ testloader = torch.utils.data.DataLoader(testset, batch_size=BATCH_SIZE,
 # Numpy variations (can be used for Sklearn training)
 trainset_x, trainset_y = dataset_to_np_array(trainset)
 testset_x, testset_y = dataset_to_np_array(testset)
+
+# dataset after PCA
+PCA_obj = PCA(whiten=True, n_components=50)
+PCA_obj.fit(trainset_x)
+
+trainset_PCA = torch.utils.data.TensorDataset(torch.Tensor(PCA_obj.transform(trainset_x)),
+                                              torch.Tensor(trainset_y).type(torch.LongTensor))
+trainloader_PCA = torch.utils.data.DataLoader(trainset_PCA, batch_size=BATCH_SIZE, 
+                                              shuffle=False, num_workers=2)
+
+testset_PCA = torch.utils.data.TensorDataset(torch.Tensor(PCA_obj.transform(testset_x)),
+                                              torch.Tensor(testset_y).type(torch.LongTensor))
+testloader_PCA  = torch.utils.data.DataLoader(testset_PCA, batch_size=BATCH_SIZE, 
+                                              shuffle=False, num_workers=2)
 

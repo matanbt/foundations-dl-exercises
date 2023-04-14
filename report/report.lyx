@@ -80,7 +80,7 @@ Foundation of Deep Learning - HW1
 \end_layout
 
 \begin_layout Author
-Matan Ben-Tov 316048321, Ofir Gaash - ?
+Matan Ben-Tov 316048321, Ofir Gaash - 315395210
 \end_layout
 
 \begin_layout Section
@@ -228,7 +228,7 @@ Firstly we implemented a baseline FFNN, and tuned the following hyperparatmeters
  - momentum, learning rate and initialization STD.
  We performed a grid search (of which results are documented in 
 \noun on
-q2-baseline-grid-search.csv
+q2-baseline-grid-search.csv)
 \noun default
  and found the following values to perform the best on the test set -
 \begin_inset Formula 
@@ -248,13 +248,15 @@ test-set accuracy of 42.46% and loss of 1.75
 \series default
 .
  The accuracy and loss curve of this optimal baseline are - 
-\end_layout
+\begin_inset Newline newline
+\end_inset
 
-\begin_layout Standard
+
 \begin_inset Graphics
 	filename img/q2-baseline-acc.png
-	lyxscale 40
-	scale 40
+	lyxscale 50
+	scale 50
+	BoundingBox 300bp 0bp 1500bp 500bp
 
 \end_inset
 
@@ -265,8 +267,9 @@ test-set accuracy of 42.46% and loss of 1.75
 
 \begin_inset Graphics
 	filename img/q2-baseline-loss.png
-	lyxscale 40
-	scale 25
+	lyxscale 50
+	scale 50
+	BoundingBox 300bp 0bp 1500bp 500bp
 
 \end_inset
 
@@ -278,7 +281,200 @@ Optimization
 \end_layout
 
 \begin_layout Standard
-TODO 
+Next we test the Adam optimizer on our data.
+ It achieves worse accuracy and loss, both on the training data and the
+ test data.
+ The process converges to 
+\series bold
+test-set accuracy of 36% and loss of 2.14.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename img/q2-optimization-acc.png
+	lyxscale 50
+	scale 35
+	BoundingBox 300bp 0bp 1500bp 500bp
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename img/q2-optimization-loss.png
+	lyxscale 50
+	scale 35
+	BoundingBox 300bp 0bp 1500bp 500bp
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Initialization
+\end_layout
+
+\begin_layout Standard
+We move on to use Xavier initialization.
+ While the test-loss and test-loss remain similar, the convergence rate
+ seems faster.
+ The process converges to 
+\series bold
+test-set accuracy of 41.5% and loss of 1.72.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename img/q2-initialization-acc.png
+	lyxscale 50
+	scale 35
+	BoundingBox 300bp 0bp 1500bp 500bp
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename img/q2-initialization-loss.png
+	lyxscale 50
+	scale 35
+	BoundingBox 300bp 0bp 1500bp 500bp
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Regularization
+\end_layout
+
+\begin_layout Standard
+TODO
+\end_layout
+
+\begin_layout Subsection
+Preprocessing
+\end_layout
+
+\begin_layout Standard
+Performing PCA on the data (500 components) seems to increase the training
+ accuracy & loss significantly, yet degrade the test accuracy & loss.
+ We also note that the process seems more stable.
+ The process converges to 
+\series bold
+test-set accuracy 28.9% and loss of 2.92
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename img/q2-preprocessing-acc.png
+	lyxscale 50
+	scale 35
+	BoundingBox 300bp 0bp 1500bp 500bp
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename img/q2-preprocessing-loss.png
+	lyxscale 50
+	scale 35
+	BoundingBox 300bp 0bp 1500bp 500bp
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Network Width
+\end_layout
+
+\begin_layout Standard
+We compare the performance of networks with width 
+\begin_inset Formula $2^{6},2^{10},2^{12}$
+\end_inset
+
+.
+ While the training improves with width, the test performance remains the
+ same.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename img/q2-netwidth-acc.png
+	lyxscale 50
+	scale 30
+	BoundingBox 300bp 0bp 1500bp 500bp
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename img/q2-netwidth-loss.png
+	lyxscale 50
+	scale 30
+	BoundingBox 300bp 0bp 1500bp 500bp
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Network Depth
+\end_layout
+
+\begin_layout Standard
+TODO: rerun.
+ 
+\end_layout
+
+\begin_layout Standard
+- current results are stored in 
+\begin_inset Quotes eld
+\end_inset
+
+2_7_res.pkl
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+- something is still weird with depth 10.
+ 
+\end_layout
+
+\begin_layout Standard
+- Also, do not forget to note that you removed initialization (didn't learn
+ anything beforehand).
+ 
+\end_layout
+
+\begin_layout Part
+DO NOT FORGET GENERAL INSTRUCTIONS THAT APPLY TO ALL OF PART 2
 \end_layout
 
 \end_body

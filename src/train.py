@@ -51,6 +51,32 @@ class TrainResults:
         print(f"   >> TEST-SET: best-accuracy={self.test_accuracies.max() * 100} accuracy={self.test_accuracies[-1] * 100}%, loss={self.test_losses[-1] }")
 
 
+class MultipleTrainResults:
+    result_keys = None
+    result_df   = None
+
+    def __init__(self, result_dict): 
+        self.result_keys = result_dict.keys()
+        result_df_list = [pd.DataFrame(asdict(v)).add_prefix(f"{k}_") for (k,v) in result_dict.items()]
+        self.result_df = pd.concat(result_df_list, axis=1)
+
+    def get_accuracies_curve(self) -> go.Figure:
+        fig = px.line(self.result_df * 100,
+                      x=self.result_df.index,
+                      y=[f"{k}_train_accuracies" for k in self.result_keys] + [f"{k}_test_accuracies" for k in self.result_keys],
+                      title="Accuracy over Epochs", labels={'index': 'Epoch', 'value': 'Accuracy (%)'})
+        fig.update_layout(yaxis_range=[0, 100])
+        return fig
+
+    def get_losses_curve(self) -> go.Figure:
+        fig = px.line(self.result_df,
+                      x=self.result_df.index,
+                      y=[f"{k}_train_losses" for k in self.result_keys] + [f"{k}_test_losses" for k in self.result_keys],
+                      title="Loss over Epochs", labels={'index': 'Epoch', 'value': 'Loss'})
+        fig.update_layout(yaxis_range=[0, 3])
+        return fig
+
+
 # run training on a torch model
 def train(model: nn.Module,
           trainloader: torch.utils.data.DataLoader,
@@ -91,6 +117,12 @@ def train(model: nn.Module,
 
                 # Backward: Calculate loss and back-prop
                 loss = model.loss_fn(logits, y_batch)
+                
+                # print("x: ", x_batch.shape)
+                # print("y: ", y_batch.shape)
+                # print("logits: ", logits.shape)
+                # print("loss: ", loss.shape)
+
                 loss.backward()
                 optimizer.step()
 

@@ -1,0 +1,461 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Foundation of Deep Learning - HW1
+\end_layout
+
+\begin_layout Author
+Matan Ben-Tov 316048321, Ofir Gaash - 315395210
+\end_layout
+
+\begin_layout Section
+Setup and Baseline
+\end_layout
+
+\begin_layout Standard
+We sampled both from the training-set and test-set of CIFAR10 10% of the
+ samples, resulting in 5K, 1K samples respectively.
+ We trained and evaluated SVM classifier on this data and the results are
+ as followed -
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+ 
+\begin_inset Tabular
+<lyxtabular version="3" rows="3" columns="3">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+SVM's Kernel Type
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Train Accuracy
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Test Accuracy
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Linear
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+98.94%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+33.10%
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+RBF
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+72.30%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+44.90%
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Feed Forward Neural Network
+\end_layout
+
+\begin_layout Standard
+We trained a FFNN on the aforementioned data, found its best hyperparameters,
+ and then modified/added certain components to better understand their impact.
+\end_layout
+
+\begin_layout Subsection
+Baseline
+\end_layout
+
+\begin_layout Standard
+Firstly we implemented a baseline FFNN, and tuned the following hyperparatmeters
+ - momentum, learning rate and initialization STD.
+ We performed a grid search (of which results are documented in 
+\noun on
+q2-baseline-grid-search.csv)
+\noun default
+ and found the following values to perform the best on the test set -
+\begin_inset Formula 
+\[
+momentum=0.9,learningRate=0.001,initSTD=0.1
+\]
+
+\end_inset
+
+We also observed that this baseline converges to 
+\series bold
+test-set accuracy of 42.46% and loss of 1.75
+\series default
+ within 
+\series bold
+<70 epochs
+\series default
+.
+ The accuracy and loss curve of this optimal baseline are - 
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename img/q2-baseline-acc.png
+	lyxscale 50
+	scale 50
+	BoundingBox 300bp 0bp 1500bp 500bp
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename img/q2-baseline-loss.png
+	lyxscale 50
+	scale 50
+	BoundingBox 300bp 0bp 1500bp 500bp
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Optimization
+\end_layout
+
+\begin_layout Standard
+Next we test the Adam optimizer on our data.
+ It achieves worse accuracy and loss, both on the training data and the
+ test data.
+ The process converges to 
+\series bold
+test-set accuracy of 36% and loss of 2.14.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename img/q2-optimization-acc.png
+	lyxscale 50
+	scale 35
+	BoundingBox 300bp 0bp 1500bp 500bp
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename img/q2-optimization-loss.png
+	lyxscale 50
+	scale 35
+	BoundingBox 300bp 0bp 1500bp 500bp
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Initialization
+\end_layout
+
+\begin_layout Standard
+We move on to use Xavier initialization.
+ While the test-loss and test-loss remain similar, the convergence rate
+ seems faster.
+ The process converges to 
+\series bold
+test-set accuracy of 41.5% and loss of 1.72.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename img/q2-initialization-acc.png
+	lyxscale 50
+	scale 35
+	BoundingBox 300bp 0bp 1500bp 500bp
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename img/q2-initialization-loss.png
+	lyxscale 50
+	scale 35
+	BoundingBox 300bp 0bp 1500bp 500bp
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Regularization
+\end_layout
+
+\begin_layout Standard
+TODO
+\end_layout
+
+\begin_layout Subsection
+Preprocessing
+\end_layout
+
+\begin_layout Standard
+Performing PCA on the data (500 components) seems to increase the training
+ accuracy & loss significantly, yet degrade the test accuracy & loss.
+ We also note that the process seems more stable.
+ The process converges to 
+\series bold
+test-set accuracy 28.9% and loss of 2.92
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename img/q2-preprocessing-acc.png
+	lyxscale 50
+	scale 35
+	BoundingBox 300bp 0bp 1500bp 500bp
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename img/q2-preprocessing-loss.png
+	lyxscale 50
+	scale 35
+	BoundingBox 300bp 0bp 1500bp 500bp
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Network Width
+\end_layout
+
+\begin_layout Standard
+We compare the performance of networks with width 
+\begin_inset Formula $2^{6},2^{10},2^{12}$
+\end_inset
+
+.
+ While the training improves with width, the test performance remains the
+ same.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename img/q2-netwidth-acc.png
+	lyxscale 50
+	scale 30
+	BoundingBox 300bp 0bp 1500bp 500bp
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename img/q2-netwidth-loss.png
+	lyxscale 50
+	scale 30
+	BoundingBox 300bp 0bp 1500bp 500bp
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Network Depth
+\end_layout
+
+\begin_layout Standard
+TODO: rerun.
+ something is still weird with depth 10.
+ Also, do not forget to note that you removed initialization (didn't learn
+ anything beforehand).
+ 
+\end_layout
+
+\begin_layout Part
+DO NOT FORGET GENERAL INSTRUCTIONS THAT APPLY TO ALL OF PART 2
+\end_layout
+
+\end_body
+\end_document

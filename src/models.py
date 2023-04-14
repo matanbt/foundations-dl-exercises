@@ -33,10 +33,45 @@ class BaselineNN(nn.Module):
             layers += [
                 nn.Linear(hidden_layer_dim, hidden_layer_dim),
                 nn.Dropout(p=p_dropout),
-                nn.ReLU(),
+                nn.ReLU()
             ]
         # project to output:
         layers.append(nn.Linear(hidden_layer_dim, num_classes))
+        self.model = nn.Sequential(*layers)
+
+        self.loss_fn = nn.CrossEntropyLoss()
+
+    def forward(self, img):
+        logits = self.model(img)
+
+        return logits  # before softmax
+
+
+class CNN(nn.Module):
+
+    def __init__(self,
+                 flattened_img_dim: int = CIFAR10_FLATTENED_IMG_DIM,
+                 num_classes: int = CIFAR10_NUM_CLASSES,
+                 hidden_layer_dim: int = 256,
+                 hidden_layers_count: int = 1,  # hidden layers count, must be > 1
+                 p_dropout: float = 0,  #  probability of an element to be zeroed
+                 ):
+        super().__init__()
+
+        layers = [
+            nn.Conv2d(in_channels=3, out_channels=6, kernel_size=(3,3)),
+            nn.Dropout(p=p_dropout),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=(2,2), stride=2, padding=1),
+
+            nn.Flatten(),
+            nn.Linear(1536, hidden_layer_dim),
+            nn.Dropout(p=p_dropout),
+            nn.ReLU(),
+
+            nn.Linear(hidden_layer_dim, num_classes)
+        ]
+
         self.model = nn.Sequential(*layers)
 
         self.loss_fn = nn.CrossEntropyLoss()
