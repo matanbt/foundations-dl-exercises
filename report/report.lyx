@@ -359,7 +359,84 @@ Regularization
 \end_layout
 
 \begin_layout Standard
-TODO
+Experiments with weight decay showed lower performance for decay 0.1 and
+ similar performance for decay 0.01, 0.001.
+ It is noteworthy that for decay 0.1, the train accuracy and test accuracy
+ were very similar.
+ The optimal decay value achieved 
+\series bold
+test-set accuracy of 43% and loss of 1.63
+\series default
+.
+ 
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename img/q2-decay-acc.png
+	lyxscale 50
+	scale 35
+	BoundingBox 400bp 0bp 1500bp 500bp
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename img/q2-decay-loss.png
+	lyxscale 50
+	scale 35
+	BoundingBox 400bp 0bp 1500bp 500bp
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Experiments with dropout showed mildly better losses.
+ The difference between dropout ratios of 0.1-0.5 was in the loss convergence
+ rate.
+ The optimal decay value achieved 
+\series bold
+test-set accuracy of 45% and loss of 1.6
+\series default
+.
+ 
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename img/q2-dropout-acc.png
+	lyxscale 50
+	scale 35
+	BoundingBox 400bp 0bp 1500bp 500bp
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename img/q2-dropout-loss.png
+	lyxscale 50
+	scale 35
+	BoundingBox 400bp 0bp 1500bp 500bp
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
@@ -413,6 +490,11 @@ We compare the performance of networks with width
 .
  While the training improves with width, the test performance remains the
  same.
+ Their 
+\series bold
+test-set accuracy is around 37% and their test-loss is around 1.8.
+\series default
+
 \begin_inset Newline newline
 \end_inset
 
@@ -446,35 +528,215 @@ Network Depth
 \end_layout
 
 \begin_layout Standard
-TODO: rerun.
- 
+We compare the performance of networks with depth 3,4,10.
+ The first two result in similar metrics.
+ The network with depth 10 does not perform as well, which might be due
+ to the vanishing gradients problem (as we are using gaussian initialization).
+ The test-set accuracy and loss are presented in the following table.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Tabular
+<lyxtabular version="3" rows="4" columns="3">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Depth
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Test Accuracy
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Test Loss
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+40%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1.69
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+4
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+40%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1.73
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+10
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+33%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1.84
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename img/q2-netdepth-acc.png
+	lyxscale 50
+	scale 35
+	BoundingBox 400bp 0bp 1500bp 500bp
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename img/q2-netdepth-loss.png
+	lyxscale 50
+	scale 35
+	BoundingBox 400bp 0bp 1500bp 500bp
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Convolutional Neural Network
+\end_layout
+
+\begin_layout Subsection
+Baseline
 \end_layout
 
 \begin_layout Standard
-- current results are stored in 
-\begin_inset Quotes eld
+Firstly we implemented a baseline CNN, and tuned the following hyperparatmeters
+ - momentum, learning rate and initialization STD.
+ We performed a grid search (of which results are documented in 
+\noun on
+q3-baseline-grid-search.csv)
+\noun default
+ and found the following values to perform the best on the test set -
+\begin_inset Formula 
+\[
+momentum=0.9,learningRate=0.001,initSTD=0.1
+\]
+
 \end_inset
 
-2_7_res.pkl
-\begin_inset Quotes erd
-\end_inset
-
+We also observed that this baseline converges to 
+\series bold
+test-set accuracy of 45% and loss of 2.6
+\series default
 .
-\end_layout
+ The accuracy and loss curve of this optimal baseline are - 
+\begin_inset Newline newline
+\end_inset
 
-\begin_layout Standard
-- something is still weird with depth 10.
- 
-\end_layout
 
-\begin_layout Standard
-- Also, do not forget to note that you removed initialization (didn't learn
- anything beforehand).
- 
-\end_layout
-
-\begin_layout Part
-DO NOT FORGET GENERAL INSTRUCTIONS THAT APPLY TO ALL OF PART 2
 \end_layout
 
 \end_body

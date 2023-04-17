@@ -31,7 +31,7 @@ class TrainResults:
         fig = px.line(pd.DataFrame(asdict(self)) * 100,
                       y=['train_accuracies', 'test_accuracies'],
                       title="Accuracy over Epochs", labels={'index': 'Epoch', 'value': 'Accuracy (%)'})
-        fig.update_layout(yaxis_range=[0, 100])
+        fig.update_layout(yaxis_range=[0, 105])
         return fig
 
     def get_losses_curve(self) -> go.Figure:

@@ -63,7 +63,7 @@ trainset_x, trainset_y = dataset_to_np_array(trainset)
 testset_x, testset_y = dataset_to_np_array(testset)
 
 # dataset after PCA
-PCA_obj = PCA(whiten=True, n_components=50)
+PCA_obj = PCA(whiten=True, n_components=500)
 PCA_obj.fit(trainset_x)
 
 trainset_PCA = torch.utils.data.TensorDataset(torch.Tensor(PCA_obj.transform(trainset_x)),
