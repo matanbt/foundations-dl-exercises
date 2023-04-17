@@ -405,7 +405,7 @@ test-set accuracy of 43% and loss of 1.63
 Experiments with dropout showed mildly better losses.
  The difference between dropout ratios of 0.1-0.5 was in the loss convergence
  rate.
- The optimal decay value achieved 
+ The optimal dropout value achieved 
 \series bold
 test-set accuracy of 45% and loss of 1.6
 \series default
@@ -732,8 +732,431 @@ We also observed that this baseline converges to
 test-set accuracy of 45% and loss of 2.6
 \series default
 .
- The accuracy and loss curve of this optimal baseline are - 
+ 
 \begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename img/q3-baseline-acc.png
+	lyxscale 50
+	scale 35
+	BoundingBox 300bp 0bp 1500bp 500bp
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename img/q3-baseline-loss.png
+	lyxscale 50
+	scale 35
+	BoundingBox 300bp 0bp 1500bp 500bp
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Optimization
+\end_layout
+
+\begin_layout Standard
+Next we test the Adam optimizer on our data.
+ It seems to completely overfit in the training process, and it does so
+ very quickly.
+ 
+\series bold
+The test-set accuracy was 50% and the test loss was iabove 3
+\series default
+ (as shown in the scond graph).
+ 
+\series bold
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename img/q3-optimization-acc.png
+	lyxscale 50
+	scale 35
+	BoundingBox 300bp 0bp 1500bp 500bp
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename img/q3-optimization-loss.png
+	lyxscale 50
+	scale 35
+	BoundingBox 300bp 0bp 1500bp 500bp
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Initialization
+\end_layout
+
+\begin_layout Standard
+We move on to use Xavier initialization.
+ It also seems to overfit on the training set, but the convergence rate
+ is not as high as in the last section and the test loss is better.
+ The process ends with 
+\series bold
+test-set accuracy of 46.75% and loss of 2.68.
+\series default
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename img/q3-initialization-acc.png
+	lyxscale 50
+	scale 35
+	BoundingBox 300bp 0bp 1500bp 500bp
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename img/q3-initialization-loss.png
+	lyxscale 50
+	scale 35
+	BoundingBox 300bp 0bp 1500bp 500bp
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Regularization
+\end_layout
+
+\begin_layout Standard
+Experiments with weight decay showed lower performance for decay 0.1 and
+ similar performance for decay 0.01, 0.001.
+ It is noteworthy that for decay 0.1, the train accuracy and test accuracy
+ were very similar.
+ The optimal decay value achieved 
+\series bold
+test-set accuracy of 47% and loss of 1.68
+\series default
+.
+ 
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename img/q3-decay-acc.png
+	lyxscale 50
+	scale 35
+	BoundingBox 400bp 0bp 1500bp 500bp
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename img/q3-decay-loss.png
+	lyxscale 50
+	scale 35
+	BoundingBox 400bp 0bp 1500bp 500bp
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Experiments with dropout showed notable performance difference between different
+ dropout values.
+ Dropout of 0.1 yielded better performance than the baseline, 0.2-0.3 showed
+ slight degredation, and 0.4-0.5 resulted in the model not learning at all.
+ The optimal dropout value achieved 
+\series bold
+test-set accuracy of 50% and loss of 1.43
+\series default
+.
+ 
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename img/q3-dropout-acc.png
+	lyxscale 50
+	scale 35
+	BoundingBox 400bp 0bp 1500bp 1500bp
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename img/q3-dropout-loss.png
+	lyxscale 50
+	scale 35
+	BoundingBox 400bp 0bp 1500bp 500bp
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Preprocessing
+\end_layout
+
+\begin_layout Standard
+TODO
+\end_layout
+
+\begin_layout Subsection
+Network Width
+\end_layout
+
+\begin_layout Standard
+We compare the performance of networks with filter sizes (256, 64) and (512,
+ 256).
+ Their performance is very similar to the baseline, except the training
+ seems to totally overfit.
+ For both cases, 
+\series bold
+the test-set accuracy is around 48% and the loss is aroudn 2.5.
+\series default
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename img/q3-netwidth-acc.png
+	lyxscale 50
+	scale 35
+	BoundingBox 400bp 0bp 1500bp 500bp
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename img/q3-netwidth-loss.png
+	lyxscale 50
+	scale 35
+	BoundingBox 400bp 0bp 1500bp 500bp
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Network Depth
+\end_layout
+
+\begin_layout Standard
+We compare the performance of networks with 3,4,5 convolutional layers.
+ They have equal accuracy compared to the baseline, yet they have notably
+ lower losses than the baseline.
+ The test-set accuracy and loss are presented in the following table.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Tabular
+<lyxtabular version="3" rows="4" columns="3">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Depth
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Test Accuracy
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Test Loss
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+48%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1.96
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+4
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+48%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1.86
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+38%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1.46
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename img/q3-netdepth-acc.png
+	lyxscale 50
+	scale 35
+	BoundingBox 400bp 0bp 1500bp 500bp
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename img/q3-netdepth-loss.png
+	lyxscale 50
+	scale 35
+	BoundingBox 400bp 0bp 1500bp 500bp
+
 \end_inset
 
 
