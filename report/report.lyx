@@ -76,7 +76,7 @@
 \begin_body
 
 \begin_layout Title
-Foundation of Deep Learning - HW1
+Foundations of Deep Learning - HW1
 \end_layout
 
 \begin_layout Author
@@ -771,7 +771,7 @@ Next we test the Adam optimizer on our data.
  very quickly.
  
 \series bold
-The test-set accuracy was 50% and the test loss was iabove 3
+The test-set accuracy was 50% and the test loss was above 3
 \series default
  (as shown in the scond graph).
  
@@ -911,7 +911,7 @@ test-set accuracy of 50% and loss of 1.43
 \begin_inset Graphics
 	filename img/q3-dropout-acc.png
 	lyxscale 50
-	scale 35
+	scale 30
 	BoundingBox 400bp 0bp 1500bp 1500bp
 
 \end_inset
@@ -924,9 +924,13 @@ test-set accuracy of 50% and loss of 1.43
 \begin_inset Graphics
 	filename img/q3-dropout-loss.png
 	lyxscale 50
-	scale 35
+	scale 30
 	BoundingBox 400bp 0bp 1500bp 500bp
 
+\end_inset
+
+
+\begin_inset Newline newline
 \end_inset
 
 
@@ -943,6 +947,10 @@ Performing PCA on the data (300 components) seems to increase the training
  The process converges to 
 \series bold
 test-set accuracy 26% and loss above 3.
+\begin_inset Newline newline
+\end_inset
+
+
 \begin_inset Newline newline
 \end_inset
 
@@ -969,6 +977,10 @@ test-set accuracy 26% and loss above 3.
 \end_inset
 
 
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
@@ -984,6 +996,14 @@ We compare the performance of networks with filter sizes (256, 64) and (512,
 \series bold
 the test-set accuracy is around 48% and the loss is aroudn 2.5.
 \series default
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
 
 \begin_inset Newline newline
 \end_inset
@@ -1162,6 +1182,14 @@ Test Loss
 </row>
 </lyxtabular>
 
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
 \end_inset
 
 
