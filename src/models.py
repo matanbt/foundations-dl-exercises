@@ -79,7 +79,10 @@ class CNN(nn.Module):
                 nn.ReLU()
             ]
 
-        linear_in_dim = {2: 1024, 3: 576, 4: 256, 5: 64}
+        # '-1' is for networks that receive PCA input
+        # the rest represents the network's depth
+        # these are the factors that determine the last layer's input dimensions
+        linear_in_dim = {2: 1024, 3: 576, 4: 256, 5: 64, -1: 64}
 
         layers += [
             nn.Flatten(),

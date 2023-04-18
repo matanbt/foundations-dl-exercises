@@ -937,7 +937,38 @@ Preprocessing
 \end_layout
 
 \begin_layout Standard
-TODO
+Performing PCA on the data (300 components) seems to increase the training
+ accuracy & loss significantly, yet degrade the test accuracy & loss.
+ We also note that the process seems more stable.
+ The process converges to 
+\series bold
+test-set accuracy 26% and loss above 3.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename img/q3-preprocessing-acc.png
+	lyxscale 50
+	scale 35
+	BoundingBox 300bp 0bp 1500bp 500bp
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename img/q3-preprocessing-loss.png
+	lyxscale 50
+	scale 35
+	BoundingBox 300bp 0bp 1500bp 500bp
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
