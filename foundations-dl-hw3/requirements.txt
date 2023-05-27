@@ -1,0 +1,5 @@
+git+https://github.com/noahgolmant/pytorch-hessian-eigenthings.git@master#egg=hessian-eigenthings
+torch==2.0.0
+tensorboard==2.13.0
+pytorch-lightning==2.0.2
+
