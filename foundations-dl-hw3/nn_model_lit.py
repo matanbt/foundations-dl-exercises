@@ -56,7 +56,7 @@ class LitNNModel(LightningModule):
         self.model = torch.nn.Sequential(*layers)
 
         # ----- model & other data for the gradient-flow-based case ----- #
-        self.gf_model = torch.nn.Linear(n_classes, n_features)
+        self.gf_model = torch.nn.Linear(n_features, n_classes)
         self.gf_loss = loss_func
         self.eta = lr
         self.N = len([layer for layer in self.model if hasattr(layer, "weight")])
@@ -97,16 +97,18 @@ class LitNNModel(LightningModule):
 
         # get Wt
         Wt  = self.gf_model.weight.data
-        wwt = Wt.T @ Wt
-        wtw = Wt @ Wt.T
+        wwt = Wt @ Wt.T
+        wtw = Wt.T @ Wt
 
         # update gf_model's weights to W_(t+1)
         eta, N = self.eta, self.N
         for j in range(1,N+1):
-            self.gf_model.weight.data -= eta * frac_pow(wwt, (j-1)/N) @ gf_loss_grad @ frac_pow(wtw, (N-j)/N) 
+            self.gf_model.weight.data -= eta * torch.Tensor(frac_pow(wwt, (j-1)/N)) @ 
+                                               gf_loss_grad.float() @ 
+                                               torch.Tensor(frac_pow(wtw, (N-j)/N)) 
 
         # log results
-        norm_of_trajectory_diff = torch.linalg.norm(self.fg_model.weight.data - self.get_e2e_mat())
+        norm_of_trajectory_diff = torch.linalg.norm(self.gf_model.weight.data - self.get_e2e_mat())
         self.log("norm_of_trajectory_diff", norm_of_trajectory_diff, prog_bar=False, on_epoch=True, on_step=False)
 
         return loss
