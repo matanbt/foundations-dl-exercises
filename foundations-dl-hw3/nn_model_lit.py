@@ -59,7 +59,7 @@ class LitNNModel(LightningModule):
         self.gf_model = torch.nn.Linear(n_classes, n_features)
         self.gf_loss = loss_func
         self.eta = lr
-        self.N = count([layer for layer in self.model if hasattr(layer, "weight")])
+        self.N = len([layer for layer in self.model if hasattr(layer, "weight")])
 
         torch.nn.init.normal_(self.gf_model.weight, mean=0.0, std=0.0001)
 
@@ -67,7 +67,7 @@ class LitNNModel(LightningModule):
         out = self.model(x)
         return out
 
-    def get_e2e_mat():
+    def get_e2e_mat(self):
         e2e_mat = None
 
         for layer in self.model:
@@ -75,7 +75,7 @@ class LitNNModel(LightningModule):
                 if e2e_mat == None:
                     e2e_mat = layer.weight
                 else:
-                    e2e_mat = torch.matmul(layer.weight, e2e_mat)
+                    e2e_mat = layer.weight @ e2e_mat
 
         return e2e_mat
 
@@ -101,12 +101,13 @@ class LitNNModel(LightningModule):
         wtw = Wt @ Wt.T
 
         # update gf_model's weights to W_(t+1)
+        eta, N = self.eta, self.N
         for j in range(1,N+1):
             self.gf_model.weight.data -= eta * frac_pow(wwt, (j-1)/N) @ gf_loss_grad @ frac_pow(wtw, (N-j)/N) 
 
         # log results
         norm_of_trajectory_diff = torch.linalg.norm(self.fg_model.weight.data - self.get_e2e_mat())
-        self.log("norm_of_trajectory_diff", norm_of_trajectory_diff, prob_bar=False, on_epoch=True, on_step=False)
+        self.log("norm_of_trajectory_diff", norm_of_trajectory_diff, prog_bar=False, on_epoch=True, on_step=False)
 
         return loss
 
