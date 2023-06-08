@@ -103,9 +103,9 @@ class LitNNModel(LightningModule):
         # update gf_model's weights to W_(t+1)
         eta, N = self.eta, self.N
         for j in range(1,N+1):
-            self.gf_model.weight.data -= eta * torch.Tensor(frac_pow(wwt, (j-1)/N)) @ 
-                                               gf_loss_grad.float() @ 
-                                               torch.Tensor(frac_pow(wtw, (N-j)/N)) 
+            self.gf_model.weight.data -= eta * torch.Tensor(frac_pow(wwt, (j-1)/N)) @ \
+                                         gf_loss_grad.float() @ \
+                                         torch.Tensor(frac_pow(wtw, (N-j)/N))
 
         # log results
         norm_of_trajectory_diff = torch.linalg.norm(self.gf_model.weight.data - self.get_e2e_mat())
@@ -117,9 +117,8 @@ class LitNNModel(LightningModule):
         """called after loss.backward() and before optimizers are stepped., to inspect weights/gradients/etc."""
 
         # Gradient magnitude:
-        grad_magnitude = 0
-        for parameter in self.parameters():
-            grad_magnitude += torch.linalg.norm(parameter.grad)  # TODO what is the definition of gradient magnitude?
+        flattened_grad = torch.cat([p.grad.flatten() for p in self.parameters()])
+        grad_magnitude = torch.norm(flattened_grad)
         self.log(f"grad_magnitude", grad_magnitude, prog_bar=False, on_epoch=True, on_step=False)
 
         # Hessian values:
@@ -130,11 +129,6 @@ class LitNNModel(LightningModule):
                                                    use_gpu=False)  # TODO verify this works as expected
         self.log(f"max_hessian_eigenval", np.max(eigenvals), prog_bar=False, on_epoch=True, on_step=False)
         self.log(f"min_hessian_eigenval", np.min(eigenvals), prog_bar=False, on_epoch=True, on_step=False)
-
-        # # Gradient magnitude - Ofir's version (which is GPT's version):
-        # flattened_grad = torch.cat([p.grad.flatten() for p in self.parameters()])
-        # grad_magnitude = torch.norm(flattened_grad)
-        # self.log(f"grad_magnitude_v2", grad_magnitude, prog_bar=False, on_epoch=True, on_step=False)
 
     def validation_step(self, batch, batch_idx):
         self.evaluate(batch, stage="val")
