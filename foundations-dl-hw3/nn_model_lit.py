@@ -60,8 +60,9 @@ class LitNNModel(LightningModule):
         self.gf_loss = loss_func
         self.eta = lr
         self.N = len([layer for layer in self.model if hasattr(layer, "weight")])
-
-        torch.nn.init.normal_(self.gf_model.weight, mean=0.0, std=0.0001)
+        with torch.no_grad():
+            self.gf_model.weight.copy_(self.get_e2e_mat())
+        
 
     def forward(self, x):
         out = self.model(x)
