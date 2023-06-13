@@ -32,6 +32,9 @@ class LitNNModel(LightningModule):
                  # opt. hyperparameters
                  lr: float = 0.01,
                  weight_decay: float = 0.005,
+
+                 # misc
+                 train_size: int = 512,
                  ):
         super().__init__()
 
@@ -55,13 +58,16 @@ class LitNNModel(LightningModule):
         ]
         self.model = torch.nn.Sequential(*layers)
 
-        # ----- model & other data for the gradient-flow-based case ----- #
+        # ----- model & other data for the gradient-flow-based case [PART3.EXP1] ----- #
         self.gf_model = torch.nn.Linear(n_features, n_classes)
         self.gf_loss = loss_func
         self.eta = lr
         self.N = len([layer for layer in self.model if hasattr(layer, "weight")])
         with torch.no_grad():
             self.gf_model.weight.copy_(self.get_e2e_mat())
+
+        # ----- model & other data for the 'Neural Tangent Kernel' case [PART3.EXP2] ----- #
+        self.ntk_u = torch.zeros((train_size, 1))  # the u being optimized via the NTK dynamics showed in class
         
 
     def forward(self, x):
@@ -80,6 +86,24 @@ class LitNNModel(LightningModule):
 
         return e2e_mat
 
+    def _update_u_ntk(self, x, y):
+        """ NTK update rule [PART3.EXP2]"""
+
+        normalized_x = nn.functional.normalize(x, dim=1)
+
+        # x of shape (train_size, dim_in), so (x@x.T)_{i,j} contains <x_i,x_j>
+        x_products = x @ x.T
+        x_products_normalized = normalized_x @ normalized_x.T
+
+        # H = (1/torch.pi)(X@X.t())*(torch.pi-torch.acos(normalized_X@normalized_X.t()))
+
+        h_star = x_products * (1 / (2 * torch.pi)) * (torch.pi - torch.arccos(x_products_normalized))
+        h_star = torch.nan_to_num(h_star, nan=0.0)  # replace nans, caused by h_star calculated
+        update_u = - h_star @ (self.ntk_u - y)
+
+        self.ntk_u += self.hparams.lr * update_u
+        return self.ntk_u
+
     def training_step(self, batch, batch_idx):
         x, y = batch
 
@@ -87,7 +111,7 @@ class LitNNModel(LightningModule):
         loss = self.loss(logits, y)
         self.evaluate(batch, logits=logits, stage='train')
 
-        # ----- compute the step of the gradient-flow linear model ----- #
+        # ----- compute the step of the gradient-flow linear model [PART3.EXP1] ----- #
 
         # get ∇ℓ(Wt)
         self.gf_model.zero_grad()
@@ -111,6 +135,13 @@ class LitNNModel(LightningModule):
         # log results
         norm_of_trajectory_diff = torch.linalg.norm(self.gf_model.weight.data - self.get_e2e_mat())
         self.log("norm_of_trajectory_diff", norm_of_trajectory_diff, prog_bar=False, on_epoch=True, on_step=False)
+
+        # ----- compute the step of the gradient-flow linear model [PART3.EXP2] ----- #
+        self.ntk_u = self._update_u_ntk(x, y)
+
+        # compare regularly-optimized model's logits to those of NTK
+        logits_to_u_ntk_diff = torch.linalg.norm(logits - self.ntk_u)
+        self.log("logits_to_u_ntk_diff", logits_to_u_ntk_diff, prog_bar=False, on_epoch=True, on_step=False)
 
         return loss
 
@@ -155,14 +186,19 @@ class LitNNModel(LightningModule):
         return {"optimizer": optimizer}
 
 
-def get_lnn_regression_model(in_dim, out_dim, N=2):
+def get_lnn_regression_model(in_dim, out_dim,
+                             train_size=512,
+                             activation_func=torch.nn.Identity(),
+                             width=50,
+                             N=2):
     model = LitNNModel(lr=1e-4,
                        weight_decay=5e-5,
                        n_features=in_dim,
                        n_classes=out_dim,
-                       activation_func=torch.nn.Identity(),
-                       hidden_layers_list=[50] * N,
-                       loss_func=torch.nn.MSELoss()
+                       activation_func=activation_func,
+                       hidden_layers_list=[width] * N,
+                       loss_func=torch.nn.MSELoss(),
+                       train_size=train_size,
                        )
     model.to(torch.float64)  # to support the (california houses) regression data
 
